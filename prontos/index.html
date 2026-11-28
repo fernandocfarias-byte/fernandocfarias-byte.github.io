@@ -116,7 +116,7 @@ footer b{color:#fff}.cv-creci{font-size:.8em;opacity:.8;letter-spacing:.02em}foo
 .cover a:focus-visible,.cover button:focus-visible{outline:2px solid #c79a5b;outline-offset:3px}
 @media (max-width:860px){.cv-grid{grid-template-columns:1fr;gap:28px;padding-top:32px}.cv-photo{order:-1;justify-self:start;width:110px}.cv-photo::before{top:-5px;left:-5px;width:calc(100% + 10px)}.cv-photo figcaption{text-align:left}.cv-name span+span{padding-left:.5em}.cv-wa span{display:none}.cover{padding-bottom:44px}}
 @media (prefers-reduced-motion:reduce){.reef path{animation:none;stroke-dashoffset:0}}
-</style>
+.tag.bf{background:#111;color:#ff7a00;left:auto;right:8px;font-weight:700}.pr s.de{color:#9aa3a6;font-weight:400;font-size:.8em;margin-right:4px}</style>
 </head>
 <body>
 <header class="cover"><div class="cover-in">
@@ -192,7 +192,7 @@ function render(keep){
  if(!keep)shown=PAGE;
  $('cnt').textContent=pl(LIST.length,'imóvel','imóveis')+(mode==='v'?' à venda':' para alugar');
  const S=LIST.slice(0,shown);
- $('grid').innerHTML=S.length?S.map(d=>`<button class="card" data-k="${esc(d.k)}"><div class="ph"><img loading="lazy" data-ch="${d.ch}" data-ci="${d.cx}" alt=""><span class="tag">${esc(d.t)}</span>${d.neg?'<span class="tag neg">Em negociação</span>':''}</div><div class="bd"><div class="loc">${esc(d.b)}${d.b!==d.ci?' • '+esc(d.ci):''}</div><div class="nm">${esc(name(d))}</div><div class="sp">${esc(specs(d).join(' • '))}</div><div class="pr">${brl(price(d))}${mode==='a'?'<small>/mês</small>':''}</div></div></button>`).join(''):'<div class="empty">Nenhum imóvel com esses filtros. Fale comigo no WhatsApp que eu procuro para você.</div>';
+ $('grid').innerHTML=S.length?S.map(d=>`<button class="card" data-k="${esc(d.k)}"><div class="ph"><img loading="lazy" data-ch="${d.ch}" data-ci="${d.cx}" alt=""><span class="tag">${esc(d.t)}</span>${d.neg?'<span class="tag neg">Em negociação</span>':''}${d.bf?'<span class="tag bf">BLACK PPM</span>':''}</div><div class="bd"><div class="loc">${esc(d.b)}${d.b!==d.ci?' • '+esc(d.ci):''}</div><div class="nm">${esc(name(d))}</div><div class="sp">${esc(specs(d).join(' • '))}</div><div class="pr">${d.bf&&mode==='v'?'<s class="de">'+brl(d.bf)+'</s> ':''}${brl(price(d))}${mode==='a'?'<small>/mês</small>':''}</div></div></button>`).join(''):'<div class="empty">Nenhum imóvel com esses filtros. Fale comigo no WhatsApp que eu procuro para você.</div>';
  $('mais').hidden=LIST.length<=shown;$('mais').textContent='Ver mais imóveis ('+(LIST.length-shown)+')';
  paintCovers()}
 function go(i){if(!cur)return;const n=$('tr').children.length;if(!n)return;gi=(i+n)%n;const s=$('tr').children[gi];$('tr').scrollTo({left:s.offsetLeft,behavior:'smooth'});mark()}
@@ -207,8 +207,8 @@ function open_(k){const d=D.find(x=>x.k===k);if(!d)return;cur=d;gi=0;
  $('mf').innerHTML=f.map(x=>`<span>${esc(x)}</span>`).join('');
  $('md2').textContent=d.d||'Fale comigo para receber todos os detalhes deste imóvel.';
  $('amw').style.display=d.tg.length?'':'none';$('am').innerHTML=d.tg.map(x=>`<span>${esc(x)}</span>`).join('');
- $('mpl').textContent=d.v?'Valor de venda':'Aluguel mensal';$('mp').textContent=brl(d.v||d.a)+(d.v?'':'/mês');
- const rows=[];if(d.cd)rows.push(['Condomínio',brl(d.cd)+'/mês']);if(d.ip)rows.push(['IPTU',brl(d.ip)+'/ano']);if(d.v&&d.ar)rows.push(['Valor por m²',brl(Math.round(d.v/d.ar))]);if(d.neg)rows.push(['Situação','Em negociação']);
+ $('mpl').textContent=d.v?(d.bf?'BLACK PPM · de '+brl(d.bf)+' por':'Valor de venda'):'Aluguel mensal';$('mp').textContent=brl(d.v||d.a)+(d.v?'':'/mês');
+ const rows=[];if(d.cd)rows.push(['Condomínio',brl(d.cd)+'/mês']);if(d.ip)rows.push(['IPTU',brl(d.ip)+'/ano']);if(d.v&&d.ar)rows.push(['Valor por m²',brl(Math.round(d.v/d.ar))]);if(d.neg)rows.push(['Situação','Em negociação']);if(d.bf&&d.bfo)rows.push(['Oferta',d.bfo]);
  $('mt').innerHTML=rows.map(r=>`<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('');
  $('mco').textContent='Código do imóvel: '+d.k;
  $('mw').href='https://wa.me/'+WA+'?text='+encodeURIComponent(`Olá Fernando! Tenho interesse no imóvel ${name(d)} (${d.b}), código ${d.k}.`);
